@@ -168,8 +168,8 @@ public class UserController {
 	public ResponseEntity<Topics> addTopics(@RequestBody Topics topics, Principal principal) {
 		UserData user = this.userRepo.getUserByUserName(principal.getName());
 		for (RoleModel role : user.getRoles()) {
-			if (role.getRole_name().equalsIgnoreCase(Constants.ROLE_AUTHOR)
-					|| role.getRole_name().equalsIgnoreCase(Constants.ROLE_MENTOR)) {
+			if (role.getRoleName().equalsIgnoreCase(Constants.ROLE_AUTHOR)
+					|| role.getRoleName().equalsIgnoreCase(Constants.ROLE_MENTOR)) {
 				return ResponseEntity.ok(this.userService.addTopics(topics));
 			}
 		}
@@ -182,8 +182,8 @@ public class UserController {
 		try {
 			user = this.userRepo.getUserByUserName(principal.getName());
 			for (RoleModel role : user.getRoles()) {
-				if (role.getRole_name().equalsIgnoreCase(Constants.ROLE_AUTHOR)
-						|| role.getRole_name().equalsIgnoreCase(Constants.ROLE_MENTOR)) {
+				if (role.getRoleName().equalsIgnoreCase(Constants.ROLE_AUTHOR)
+						|| role.getRoleName().equalsIgnoreCase(Constants.ROLE_MENTOR)) {
 					return ResponseEntity.ok(this.userService.addSubTopics(subTopic));
 				}
 			}
@@ -200,8 +200,8 @@ public class UserController {
 		try {
 			user = this.userRepo.getUserByUserName(principal.getName());
 			for (RoleModel role : user.getRoles()) {
-				if (role.getRole_name().equalsIgnoreCase(Constants.ROLE_AUTHOR)
-						|| role.getRole_name().equalsIgnoreCase(Constants.ROLE_MENTOR)) {
+				if (role.getRoleName().equalsIgnoreCase(Constants.ROLE_AUTHOR)
+						|| role.getRoleName().equalsIgnoreCase(Constants.ROLE_MENTOR)) {
 					return ResponseEntity.ok(this.userService.addQuestions(questions));
 				}
 			}

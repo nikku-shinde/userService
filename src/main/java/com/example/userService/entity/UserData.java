@@ -30,7 +30,7 @@ public class UserData {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
-	@Column(name = "user_id")
+	@Column(name = "userId")
 	private Long id;
 	private String name;
 	private String email;
@@ -43,7 +43,7 @@ public class UserData {
 	private Date updatedAt;
 
 	@ManyToMany
-	@JoinTable(name = "users_roles_tab", joinColumns = @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name = "role_id"))
+	@JoinTable(name = "users_roles_tab", joinColumns = @JoinColumn(name = "userId"), inverseJoinColumns = @JoinColumn(name = "roleId"))
 	private List<RoleModel> roles;
 
 	

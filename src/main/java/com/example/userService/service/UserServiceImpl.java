@@ -99,7 +99,7 @@ public class UserServiceImpl implements UserService {
 	@Override
 	public RoleModel addRoles(RoleDTO roles) {
 		RoleModel role = new RoleModel();
-		role.setRole_name(roles.getRole_name());
+		role.setRoleName(roles.getRoleName());
 		return this.roleRepo.save(role);
 	}
 
@@ -123,10 +123,10 @@ public class UserServiceImpl implements UserService {
 	public Course addCourse(Course course) {
 		Course courses = this.restTemplate.postForObject(CourseApiUrl.ADD_COURSE_API_ENDPOINT, course,
 				Course.class);
-		course.setCourse_Id(courses.getCourse_Id());
+		course.setCourseId(courses.getCourseId());
 		course.setCourseName(courses.getCourseName());
-		course.setAuthor_id(courses.getAuthor_id());
-		course.setMentor_id(courses.getMentor_id());
+		course.setAuthorId(courses.getAuthorId());
+		course.setMentorId(courses.getMentorId());
 		return course;
 	}
 

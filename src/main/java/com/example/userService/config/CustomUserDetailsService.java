@@ -48,13 +48,13 @@ public class CustomUserDetailsService implements UserDetailsService {
 				for (RoleModel role_data : user.getRoles()) {
 					if (roleData.getId().equals(role_data.getId())) {
 
-						if (role_data.getRole_name().equalsIgnoreCase("ROLE_ADMIN")) {
+						if (role_data.getRoleName().equalsIgnoreCase("ROLE_ADMIN")) {
 							roles.add(new SimpleGrantedAuthority("ROLE_ADMIN"));
-						} else if (role_data.getRole_name().equalsIgnoreCase("ROLE_AUTHOR")) {
+						} else if (role_data.getRoleName().equalsIgnoreCase("ROLE_AUTHOR")) {
 							roles.add(new SimpleGrantedAuthority("ROLE_AUTHOR"));
-						} else if (role_data.getRole_name().equalsIgnoreCase("ROLE_MENTOR")) {
+						} else if (role_data.getRoleName().equalsIgnoreCase("ROLE_MENTOR")) {
 							roles.add(new SimpleGrantedAuthority("ROLE_MENTOR"));
-						} else if (role_data.getRole_name().equalsIgnoreCase("ROLE_TRAINEE")) {
+						} else if (role_data.getRoleName().equalsIgnoreCase("ROLE_TRAINEE")) {
 							roles.add(new SimpleGrantedAuthority("ROLE_TRAINEE"));
 						}
 					}

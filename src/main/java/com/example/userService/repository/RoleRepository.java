@@ -12,7 +12,7 @@ import com.example.userService.entity.RoleModel;
 
 public interface RoleRepository extends JpaRepository<RoleModel, Long> {
 	
-	@Query("select a from RoleModel a where a.role_name=:role_name")
-	public List<RoleModel> getRoleModelByRole(@Param("role_name") String role_name);
+	@Query("select a from RoleModel a where a.roleName=:roleName")
+	public List<RoleModel> getRoleModelByRole(@Param("roleName") String roleName);
 }
 

@@ -11,8 +11,8 @@ import lombok.Setter;
 @Setter
 public class Course {
 
-	private Long course_Id;
+	private Long courseId;
 	private String courseName;
-	private Long author_id;
-	private Long mentor_id;
+	private Long authorId;
+	private Long mentorId;
 }

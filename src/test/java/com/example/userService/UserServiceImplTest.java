@@ -109,8 +109,8 @@ public class UserServiceImplTest {
 	@Order(5)
 	public void test_addRoles() {
 		RoleDTO roleDTO = new RoleDTO();
-		roleDTO.setRole_name("ROLE_AUTHOR");
-		RoleModel role = new RoleModel(1l,roleDTO.getRole_name());
+		roleDTO.setRoleName("ROLE_AUTHOR");
+		RoleModel role = new RoleModel(1l,roleDTO.getRoleName());
 		when(roleRepo.save(role)).thenReturn(role);
 		service.addRoles(roleDTO);
 	}
@@ -167,10 +167,10 @@ public class UserServiceImplTest {
 	public void test_addCourse() {
 		Course course = new Course(1l, "JAVA", 2l, 3l);
 		when(restTemplate.postForObject(CourseApiUrl.ADD_COURSE_API_ENDPOINT, course, Course.class)).thenReturn(course);
-		course.setCourse_Id(course.getCourse_Id());
+		course.setCourseId(course.getCourseId());
 		course.setCourseName(course.getCourseName());
-		course.setAuthor_id(course.getAuthor_id());
-		course.setMentor_id(course.getMentor_id());
+		course.setAuthorId(course.getAuthorId());
+		course.setMentorId(course.getMentorId());
 		assertEquals(course, service.addCourse(course));
 	}
 	

@@ -20,20 +20,12 @@ public class RoleModel {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
-	@Column(name = "role_id")
+	@Column(name = "roleId")
 	private Long id;
-	private String role_name;
-	
+	private String roleName;
+
 	@ManyToMany(mappedBy = "roles")
 	private List<UserData> users;
-	
-	
-
-	public RoleModel(Long id, String role_name) {
-		super();
-		this.id = id;
-		this.role_name = role_name;
-	}
 
 	public Long getId() {
 		return id;
@@ -43,12 +35,18 @@ public class RoleModel {
 		this.id = id;
 	}
 
-	public String getRole_name() {
-		return role_name;
+	public String getRoleName() {
+		return roleName;
 	}
 
-	public void setRole_name(String role_name) {
-		this.role_name = role_name;
+	public void setRoleName(String roleName) {
+		this.roleName = roleName;
+	}
+
+	public RoleModel(Long id, String roleName) {
+		super();
+		this.id = id;
+		this.roleName = roleName;
 	}
 
 }
