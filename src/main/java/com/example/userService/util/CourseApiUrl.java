@@ -2,6 +2,11 @@ package com.example.userService.util;
 
 public class CourseApiUrl {
 	
+	
+	private CourseApiUrl() {
+		throw new IllegalStateException("Constants utility class");
+	}
+	
 	/*
 	*
 		********** COURSE-SERVICE API *************

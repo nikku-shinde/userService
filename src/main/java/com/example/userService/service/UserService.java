@@ -1,10 +1,6 @@
 package com.example.userService.service;
 
-import java.io.File;
 import java.util.List;
-
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.multipart.MultipartFile;
 
 import com.example.userService.DTO.RoleDTO;
 import com.example.userService.DTO.UserDTO;
@@ -16,7 +12,6 @@ import com.example.userService.helper.SubTopic;
 import com.example.userService.helper.Topics;
 import com.example.userService.payload.EmailPayload;
 import com.example.userService.payload.ForgotPasswordPayload;
-import com.example.userService.payload.LoginPayload;
 import com.example.userService.payload.OtpPayload;
 
 public interface UserService {
@@ -57,11 +52,11 @@ public interface UserService {
 	
 	public List<Questions> getQuestions();
 	
-	public List<Topics> getTopicByCourseId(Long course_id);
+	public List<Topics> getTopicByCourseId(Long courseId);
 	
-	public List<SubTopic> getSubTopicByTopicId(Long topic_id);
+	public List<SubTopic> getSubTopicByTopicId(Long topicId);
 	
-	public List<Questions> getQuestionsBySubTopicId(Long sub_topic_id);
+	public List<Questions> getQuestionsBySubTopicId(Long subTopicId);
 	
 	public void sendEmail(EmailPayload emailPayload);
 	

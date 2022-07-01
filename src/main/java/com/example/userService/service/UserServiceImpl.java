@@ -83,12 +83,12 @@ public class UserServiceImpl implements UserService {
 		userData.setUserName(user.getUserName());
 		userData.setProfile(user.getProfile());
 		List<RoleModel> roles = roleRepo.findAll();
-		List<RoleModel> user_roles = new ArrayList<>();
+		List<RoleModel> userRoles = new ArrayList<>();
 		for (RoleModel role_user : user.getRoles()) {
 			for (RoleModel role : roles) {
 				if (role.getId().equals(role_user.getId())) {
-					user_roles.add(role);
-					userData.setRoles(user_roles);
+					userRoles.add(role);
+					userData.setRoles(userRoles);
 					userData.setPassword(passwordEncoder.encode(user.getPassword()));
 				}
 			}
@@ -106,12 +106,12 @@ public class UserServiceImpl implements UserService {
 	@Override
 	public UserData addAdminUserData(UserData user) {
 		List<RoleModel> roles = roleRepo.findAll();
-		List<RoleModel> user_roles = new ArrayList<>();
+		List<RoleModel> userRoles = new ArrayList<>();
 		for (RoleModel role_user : user.getRoles()) {
 			for (RoleModel role : roles) {
 				if (role.getId().equals(role_user.getId())) {
-					user_roles.add(role);
-					user.setRoles(user_roles);
+					userRoles.add(role);
+					user.setRoles(userRoles);
 					user.setPassword(passwordEncoder.encode(user.getPassword()));
 				}
 			}
@@ -132,32 +132,32 @@ public class UserServiceImpl implements UserService {
 
 	@Override
 	public Topics addTopics(Topics topics) {
-		Topics topics_data = this.restTemplate.postForObject(CourseApiUrl.ADD_TOPICS_API_ENDPOINT, topics,
+		Topics topicsData = this.restTemplate.postForObject(CourseApiUrl.ADD_TOPICS_API_ENDPOINT, topics,
 				Topics.class);
-		topics.setId(topics_data.getId());
-		topics.setTopicName(topics_data.getTopicName());
-		topics.setCourse(topics_data.getCourse());
+		topics.setId(topicsData.getId());
+		topics.setTopicName(topicsData.getTopicName());
+		topics.setCourse(topicsData.getCourse());
 		return topics;
 	}
 
 	@Override
 	public SubTopic addSubTopics(SubTopic subTopic) {
-		SubTopic subTopic_data = this.restTemplate.postForObject(CourseApiUrl.ADD_SUB_TOPICS_API_ENDPOINT,
+		SubTopic subTopicData = this.restTemplate.postForObject(CourseApiUrl.ADD_SUB_TOPICS_API_ENDPOINT,
 				subTopic, SubTopic.class);
 
-		subTopic.setId(subTopic_data.getId());
-		subTopic.setSubTopicName(subTopic_data.getSubTopicName());
-		subTopic.setTopic(subTopic_data.getTopic());
+		subTopic.setId(subTopicData.getId());
+		subTopic.setSubTopicName(subTopicData.getSubTopicName());
+		subTopic.setTopic(subTopicData.getTopic());
 		return subTopic;
 	}
 
 	@Override
 	public Questions addQuestions(Questions questions) {
-		Questions question_data = this.restTemplate.postForObject(CourseApiUrl.ADD_QUESTIONS_API_ENDPOINT,
+		Questions questionData = this.restTemplate.postForObject(CourseApiUrl.ADD_QUESTIONS_API_ENDPOINT,
 				questions, Questions.class);
-		questions.setId(question_data.getId());
-		questions.setQuestion(question_data.getQuestion());
-		questions.setSubTopic(question_data.getSubTopic());
+		questions.setId(questionData.getId());
+		questions.setQuestion(questionData.getQuestion());
+		questions.setSubTopic(questionData.getSubTopic());
 		return questions;
 	}
 
@@ -214,10 +214,10 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
-	public List<Topics> getTopicByCourseId(Long course_id) {
+	public List<Topics> getTopicByCourseId(Long courseId) {
 		List<Topics> topic = new ArrayList<Topics>();
 		ResponseEntity<List<Topics>> claimResponse = restTemplate.exchange(
-				String.format(CourseApiUrl.TOPICS_BY_COURSE_ID_API_ENDPOINT, course_id), HttpMethod.GET, null,
+				String.format(CourseApiUrl.TOPICS_BY_COURSE_ID_API_ENDPOINT, courseId), HttpMethod.GET, null,
 				new ParameterizedTypeReference<List<Topics>>() {
 				});
 		if (claimResponse != null && claimResponse.hasBody()) {
@@ -227,10 +227,10 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
-	public List<SubTopic> getSubTopicByTopicId(Long topic_id) {
+	public List<SubTopic> getSubTopicByTopicId(Long topicId) {
 		List<SubTopic> subTopic = new ArrayList<SubTopic>();
 		ResponseEntity<List<SubTopic>> claimResponse = restTemplate.exchange(
-				String.format(CourseApiUrl.SUB_TOPICS_BY_TOPIC_ID_API_ENDPOINT, topic_id), HttpMethod.GET, null,
+				String.format(CourseApiUrl.SUB_TOPICS_BY_TOPIC_ID_API_ENDPOINT, topicId), HttpMethod.GET, null,
 				new ParameterizedTypeReference<List<SubTopic>>() {
 				});
 		if (claimResponse != null && claimResponse.hasBody()) {
@@ -240,10 +240,10 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
-	public List<Questions> getQuestionsBySubTopicId(Long sub_topic_id) {
+	public List<Questions> getQuestionsBySubTopicId(Long subTopicId) {
 		List<Questions> question = new ArrayList<Questions>();
 		ResponseEntity<List<Questions>> claimResponse = restTemplate.exchange(
-				String.format(CourseApiUrl.QUESTIONS_BY_SUB_TOPIC_ID_API_ENDPOINT, sub_topic_id), HttpMethod.GET, null,
+				String.format(CourseApiUrl.QUESTIONS_BY_SUB_TOPIC_ID_API_ENDPOINT, subTopicId), HttpMethod.GET, null,
 				new ParameterizedTypeReference<List<Questions>>() {
 				});
 		if (claimResponse != null && claimResponse.hasBody()) {

@@ -24,7 +24,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.userService.DTO.RoleDTO;
@@ -306,9 +305,9 @@ public class UserController {
 			}
 
 		} catch (DisabledException e) {
-			throw new Exception("User Disabled", e);
+			throw new DisabledException("User Disabled", e);
 		} catch (BadCredentialsException e) {
-			throw new Exception("Invalid Credentials", e);
+			throw new BadCredentialsException("Invalid Credentials", e);
 		} catch (NullPointerException e) {
 			return ResponseEntity.ok(Constants.USER_INVALID);
 		}

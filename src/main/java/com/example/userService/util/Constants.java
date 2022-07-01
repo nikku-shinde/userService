@@ -2,6 +2,10 @@ package com.example.userService.util;
 
 public class Constants {
 
+	private Constants() {
+		throw new IllegalStateException("Constants utility class");
+	}
+	
 	public static final String ROLE_ADMIN = "ROLE_ADMIN";
 	public static final String ROLE_AUTHOR = "ROLE_AUTHOR";
 	public static final String ROLE_MENTOR = "ROLE_MENTOR";
