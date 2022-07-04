@@ -15,6 +15,8 @@ public class Constants {
 	public static final String USER_DELETED_SUCCESSFULLY = "User Deleted Successfully";
 	public static final String COURSE_ALREADY_ADDED = "Course Already Added";
 	public static final String ADMIN_CANNOT_ADD_TOPICS = "Admin cannot add topics";
+	public static final String ADMIN_CANNOT_ADD_SUBTOPICS = "Admin cannot add sub topics";
+	public static final String ADMIN_CANNOT_ADD_QUESTIONS = "Admin cannot add sub Questions";
 	public static final String MAIL_SEND_MESSAGE = "Congratulations! Your mail has been send to the user.";
 	public static final String PASSWORD_INVALID = "Password Invalid";
 	public static final String USER_INVALID = "User Invalid";

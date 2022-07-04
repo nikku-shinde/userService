@@ -157,15 +157,20 @@ public class UserController {
 	}
 
 	@PostMapping("/add-topics")
-	public ResponseEntity<Topics> addTopics(@RequestBody Topics topics, Principal principal) {
-		UserData user = this.userRepo.getUserByUserName(principal.getName());
-		for (RoleModel role : user.getRoles()) {
-			if (role.getRoleName().equalsIgnoreCase(Constants.ROLE_AUTHOR)
-					|| role.getRoleName().equalsIgnoreCase(Constants.ROLE_MENTOR)) {
-				return ResponseEntity.ok(this.userService.addTopics(topics));
+	public ResponseEntity<Object> addTopics(@RequestBody Topics topics, Principal principal) {
+		UserData user = null;
+		try {
+			user = this.userRepo.getUserByUserName(principal.getName());
+			for (RoleModel role : user.getRoles()) {
+				if (role.getRoleName().equalsIgnoreCase(Constants.ROLE_AUTHOR)
+						|| role.getRoleName().equalsIgnoreCase(Constants.ROLE_MENTOR)) {
+					return ResponseEntity.ok(this.userService.addTopics(topics));
+				}
 			}
+			return ResponseEntity.ok(Constants.ADMIN_CANNOT_ADD_TOPICS);
+		} catch (Exception e) {
+			return ResponseEntity.ok(Constants.ADMIN_CANNOT_ADD_TOPICS);
 		}
-		throw new UsernameNotFoundException(user.getUserName());
 	}
 
 	@PostMapping("/add-sub_topics")
@@ -179,10 +184,10 @@ public class UserController {
 					return ResponseEntity.ok(this.userService.addSubTopics(subTopic));
 				}
 			}
-			return ResponseEntity.ok(Constants.ADMIN_CANNOT_ADD_TOPICS);
+			return ResponseEntity.ok(Constants.ADMIN_CANNOT_ADD_SUBTOPICS);
 			
 		} catch (Exception e) {
-			throw new UsernameNotFoundException(user.getUserName());
+			return ResponseEntity.ok(Constants.ADMIN_CANNOT_ADD_SUBTOPICS);
 		}	
 	}
 
@@ -197,9 +202,9 @@ public class UserController {
 					return ResponseEntity.ok(this.userService.addQuestions(questions));
 				}
 			}
-			return ResponseEntity.ok(Constants.ADMIN_CANNOT_ADD_TOPICS);
+			return ResponseEntity.ok(Constants.ADMIN_CANNOT_ADD_QUESTIONS);
 		} catch (Exception e) {
-			throw new UsernameNotFoundException(user.getUserName());
+			return ResponseEntity.ok(Constants.ADMIN_CANNOT_ADD_QUESTIONS);
 		}
 	}
 
