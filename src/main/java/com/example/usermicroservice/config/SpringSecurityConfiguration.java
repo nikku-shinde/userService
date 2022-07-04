@@ -1,6 +1,7 @@
 package com.example.usermicroservice.config;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -16,6 +17,9 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @EnableWebSecurity
 public class SpringSecurityConfiguration extends WebSecurityConfigurerAdapter {
 
+	@Value("${security.enable-csrf}")
+    private boolean csrfEnabled;
+	
 	@Autowired
 	private CustomUserDetailsService userDetailsService;
 
@@ -45,6 +49,10 @@ public class SpringSecurityConfiguration extends WebSecurityConfigurerAdapter {
 	@Override
 	protected void configure(HttpSecurity httpSecurity) throws Exception {
 
+		if (!csrfEnabled) {
+			httpSecurity.cors().and().csrf().disable();
+        }
+		
 		httpSecurity.authorizeRequests()
 		.antMatchers("/users/authenticate/**").permitAll().anyRequest().authenticated().and().exceptionHandling()
 		.authenticationEntryPoint(jwtAuthenticationEntryPoint).and().sessionManagement()
