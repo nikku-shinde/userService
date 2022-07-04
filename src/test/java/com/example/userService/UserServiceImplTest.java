@@ -1,5 +1,11 @@
 package com.example.userService;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
+
 import java.sql.Date;
 import java.util.ArrayList;
 import java.util.List;
@@ -10,14 +16,10 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestMethodOrder;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import static org.mockito.Mockito.*;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
-import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.client.RestTemplate;
@@ -33,6 +35,7 @@ import com.example.userService.helper.Topics;
 import com.example.userService.repository.RoleRepository;
 import com.example.userService.repository.UserRepository;
 import com.example.userService.service.UserServiceImpl;
+import com.example.userService.util.Constants;
 import com.example.userService.util.CourseApiUrl;
 
 @TestMethodOrder(OrderAnnotation.class)
@@ -102,6 +105,7 @@ public class UserServiceImplTest {
 		UserData user = new UserData(1l, userDTO.getName() ,userDTO.getEmail(),userDTO.getUserName(),userDTO.getPassword(),userDTO.getProfile() , new Date(2022-06-27), new Date(2022-06-27), userDTO.getRoles());
 		when(passwordEncoder.encode(user.getPassword())).thenReturn(user.getPassword());
 		when(userRepo.save(user)).thenReturn(user);
+		assertNotNull(userDTO, Constants.USER_ADDED_SUCCESSFULLY);
 		service.addUserData(userDTO);
 	}
 	
@@ -112,6 +116,7 @@ public class UserServiceImplTest {
 		roleDTO.setRoleName("ROLE_AUTHOR");
 		RoleModel role = new RoleModel(1l,roleDTO.getRoleName());
 		when(roleRepo.save(role)).thenReturn(role);
+		assertNotNull(roleDTO, Constants.ROLE_ADDED_SUCCESSFULLY);
 		service.addRoles(roleDTO);
 	}
 	
@@ -136,6 +141,7 @@ public class UserServiceImplTest {
 		Long user_id = 1l;
 		when(userRepo.getUserById(user_id)).thenReturn(user);
 		when(userRepo.save(user)).thenReturn(user);
+		assertNotNull(userDTO, Constants.USER_UPDATED_SUCCESSFULLY);
 		service.updateUser(user_id, userDTO);
 	}
 	

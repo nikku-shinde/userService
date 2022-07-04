@@ -18,4 +18,7 @@ public class Constants {
 	public static final String MAIL_SEND_MESSAGE = "Congratulations! Your mail has been send to the user.";
 	public static final String PASSWORD_INVALID = "Password Invalid";
 	public static final String USER_INVALID = "User Invalid";
+	public static final String USER_ADDED_SUCCESSFULLY = "User Added Successfully";
+	public static final String ROLE_ADDED_SUCCESSFULLY = "Role Added Successfully";
+	public static final String USER_UPDATED_SUCCESSFULLY = "User Updated Successfully";
 }

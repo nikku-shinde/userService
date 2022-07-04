@@ -152,12 +152,7 @@ public class UserController {
 	@PostMapping("/add-course")
 	public ResponseEntity<Object> addCourse(@RequestBody Course course, Principal principal) {
 		try {
-			Course courseData = this.userService.addCourse(course);
-			if(courseData.getCourseName() == null) {
-				return ResponseEntity.ok(Constants.COURSE_ALREADY_ADDED);
-			}else {
-				return ResponseEntity.ok(this.userService.addCourse(course));
-			}
+			return ResponseEntity.ok(this.userService.addCourse(course));
 		} catch (Exception e) {
 			return ResponseEntity.ok(new Exception(Constants.COURSE_ALREADY_ADDED,e));
 		}
