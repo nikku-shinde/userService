@@ -165,7 +165,7 @@ public class UserController {
 				return ResponseEntity.ok(this.userService.addTopics(topics));
 			}
 		}
-		throw new UsernameNotFoundException(Constants.USER_NOT_FOUND_WITH_USERNAME + user.getUserName());
+		throw new UsernameNotFoundException(user.getUserName());
 	}
 
 	@PostMapping("/add-sub_topics")
@@ -182,7 +182,7 @@ public class UserController {
 			return ResponseEntity.ok(Constants.ADMIN_CANNOT_ADD_TOPICS);
 			
 		} catch (Exception e) {
-			throw new UsernameNotFoundException(Constants.USER_NOT_FOUND_WITH_USERNAME + user.getUserName());
+			throw new UsernameNotFoundException(user.getUserName());
 		}	
 	}
 
@@ -199,7 +199,7 @@ public class UserController {
 			}
 			return ResponseEntity.ok(Constants.ADMIN_CANNOT_ADD_TOPICS);
 		} catch (Exception e) {
-			throw new UsernameNotFoundException(Constants.USER_NOT_FOUND_WITH_USERNAME + user.getUserName());
+			throw new UsernameNotFoundException(user.getUserName());
 		}
 	}
 
