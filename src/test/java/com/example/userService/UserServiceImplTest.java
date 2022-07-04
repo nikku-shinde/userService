@@ -40,7 +40,7 @@ import com.example.userService.util.CourseApiUrl;
 
 @TestMethodOrder(OrderAnnotation.class)
 @SpringBootTest(classes = {UserServiceImplTest.class})
-public class UserServiceImplTest {
+class UserServiceImplTest {
 
 	@Mock
 	private UserRepository userRepo;
@@ -62,7 +62,7 @@ public class UserServiceImplTest {
 	
 	@Test
 	@Order(1)
-	public void test_getAllUsers() {
+	void test_getAllUsers() {
 		List<RoleModel> role_list = new ArrayList<RoleModel>();
 		role_list.add(new RoleModel(1l,"ROLE_ADMIN"));
 		List<UserData> user_list = new ArrayList<UserData>();
@@ -74,7 +74,7 @@ public class UserServiceImplTest {
 	
 	@Test
 	@Order(2)
-	public void test_getUserById() {
+	void test_getUserById() {
 		List<RoleModel> role_list = new ArrayList<RoleModel>();
 		role_list.add(new RoleModel(1l,"ROLE_ADMIN"));
 		UserData user = new UserData(1l, "abc" ,"abc@gmail.com","abc@123","abc@12344","JAVA" , new Date(2022-06-27), new Date(2022-06-27) , role_list);
@@ -85,7 +85,7 @@ public class UserServiceImplTest {
 	
 	@Test
 	@Order(3)
-	public void test_getUserByUserName() {
+	void test_getUserByUserName() {
 		List<RoleModel> role_list = new ArrayList<RoleModel>();
 		role_list.add(new RoleModel(1l,"ROLE_ADMIN"));
 		UserData user = new UserData(1l, "abc" ,"abc@gmail.com","abc@123","abc@12344","JAVA" , new Date(2022-06-27), new Date(2022-06-27), role_list);
@@ -96,7 +96,7 @@ public class UserServiceImplTest {
 	
 	@Test
 	@Order(4)
-	public void test_addUserData() {
+	void test_addUserData() {
 		List<RoleModel> role_list = new ArrayList<RoleModel>();
 		role_list.add(new RoleModel(1l,"ROLE_AUTHOR"));
 		role_list.add(new RoleModel(2l,"ROLE_MENTOR"));
@@ -111,7 +111,7 @@ public class UserServiceImplTest {
 	
 	@Test
 	@Order(5)
-	public void test_addRoles() {
+	void test_addRoles() {
 		RoleDTO roleDTO = new RoleDTO();
 		roleDTO.setRoleName("ROLE_AUTHOR");
 		RoleModel role = new RoleModel(1l,roleDTO.getRoleName());
@@ -122,7 +122,7 @@ public class UserServiceImplTest {
 	
 	@Test
 	@Order(6)
-	public void test_getAllRoles() {
+	void test_getAllRoles() {
 		List<RoleModel> role_list = new ArrayList<RoleModel>();
 		role_list.add(new RoleModel(1l,"ROLE_AUTHOR"));
 		role_list.add(new RoleModel(2l,"ROLE_MENTOR"));
@@ -132,7 +132,7 @@ public class UserServiceImplTest {
 	
 	@Test
 	@Order(7)
-	public void test_updateUser() {
+	void test_updateUser() {
 		List<RoleModel> role_list = new ArrayList<RoleModel>();
 		role_list.add(new RoleModel(1l,"ROLE_AUTHOR"));
 		role_list.add(new RoleModel(2l,"ROLE_MENTOR"));
@@ -147,7 +147,7 @@ public class UserServiceImplTest {
 	
 	@Test
 	@Order(8)
-	public void test_deleteUser() {
+	void test_deleteUser() {
 		List<RoleModel> role_list = new ArrayList<RoleModel>();
 		role_list.add(new RoleModel(1l,"ROLE_AUTHOR"));
 		role_list.add(new RoleModel(2l,"ROLE_MENTOR"));
@@ -160,7 +160,7 @@ public class UserServiceImplTest {
 	
 	@Test
 	@Order(9)
-	public void test_getUser() {
+	void test_getUser() {
 		List<String> users = new ArrayList<String>();
 		users.add("abc");
 		when(userRepo.getUserData()).thenReturn(users);
@@ -170,7 +170,7 @@ public class UserServiceImplTest {
 	
 	@Test
 	@Order(10)
-	public void test_addCourse() {
+	void test_addCourse() {
 		Course course = new Course(1l, "JAVA", 2l, 3l);
 		when(restTemplate.postForObject(CourseApiUrl.ADD_COURSE_API_ENDPOINT, course, Course.class)).thenReturn(course);
 		course.setCourseId(course.getCourseId());
@@ -182,7 +182,7 @@ public class UserServiceImplTest {
 	
 	@Test
 	@Order(11)
-	public void test_addTopics() {
+	void test_addTopics() {
 		Course course = new Course(1l, "JAVA", 2l, 3l);
 		Topics topics = new Topics(1l, "Java Core", course);
 		when(restTemplate.postForObject(CourseApiUrl.ADD_TOPICS_API_ENDPOINT, topics, Topics.class)).thenReturn(topics);
@@ -194,7 +194,7 @@ public class UserServiceImplTest {
 	
 	@Test
 	@Order(12)
-	public void test_addSubTopics() {
+	void test_addSubTopics() {
 		Course course = new Course(1l, "JAVA", 2l, 3l);
 		Topics topics = new Topics(1l, "Java Core", course);
 		SubTopic subTopic = new SubTopic(1l, "Java Introduction", topics);
@@ -207,7 +207,7 @@ public class UserServiceImplTest {
 	
 	@Test
 	@Order(13)
-	public void test_addQuestions() {
+	void test_addQuestions() {
 		Course course = new Course(1l, "JAVA", 2l, 3l);
 		Topics topics = new Topics(1l, "Java Core", course);
 		SubTopic subTopic = new SubTopic(1l, "Java Introduction", topics);
@@ -221,7 +221,7 @@ public class UserServiceImplTest {
 	
 	@Test
 	@Order(14)
-	public void test_getCourseNames() {
+	void test_getCourseNames() {
 		ResponseEntity<List<Course>> claimResponse = restTemplate.exchange(
 				CourseApiUrl.COURSES_LIST_API_ENDPOINT, HttpMethod.GET, null,
 				new ParameterizedTypeReference<List<Course>>() {
@@ -237,7 +237,7 @@ public class UserServiceImplTest {
 	
 	@Test
 	@Order(15)
-	public void test_getTopics() {
+	void test_getTopics() {
 		ResponseEntity<List<Topics>> claimResponse = restTemplate.exchange(
 				CourseApiUrl.TOPICS_LIST_API_ENDPOINT, HttpMethod.GET, null,
 				new ParameterizedTypeReference<List<Topics>>() {
@@ -253,7 +253,7 @@ public class UserServiceImplTest {
 	
 	@Test
 	@Order(16)
-	public void test_getSubTopics() {
+	void test_getSubTopics() {
 		ResponseEntity<List<SubTopic>> claimResponse = restTemplate.exchange(
 				CourseApiUrl.SUB_TOPICS_LIST_API_ENDPOINT, HttpMethod.GET, null,
 				new ParameterizedTypeReference<List<SubTopic>>() {
@@ -269,7 +269,7 @@ public class UserServiceImplTest {
 	
 	@Test
 	@Order(17)
-	public void test_getQuestions() {
+	void test_getQuestions() {
 		ResponseEntity<List<Questions>> claimResponse = restTemplate.exchange(
 				CourseApiUrl.QUESTIONS_LIST_API_ENDPOINT, HttpMethod.GET, null,
 				new ParameterizedTypeReference<List<Questions>>() {
@@ -285,7 +285,7 @@ public class UserServiceImplTest {
 	
 	@Test
 	@Order(18)
-	public void test_getTopicByCourseId() {
+	void test_getTopicByCourseId() {
 		Long course_id = 1l;
 		ResponseEntity<List<Topics>> claimResponse = restTemplate.exchange(
 				String.format(CourseApiUrl.TOPICS_BY_COURSE_ID_API_ENDPOINT, course_id), HttpMethod.GET, null,
@@ -302,7 +302,7 @@ public class UserServiceImplTest {
 	
 	@Test
 	@Order(19)
-	public void test_getSubTopicByTopicId() {
+	void test_getSubTopicByTopicId() {
 		Long topic_id = 1l;
 		ResponseEntity<List<SubTopic>> claimResponse = restTemplate.exchange(
 				String.format(CourseApiUrl.SUB_TOPICS_BY_TOPIC_ID_API_ENDPOINT, topic_id), HttpMethod.GET, null,
@@ -319,7 +319,7 @@ public class UserServiceImplTest {
 	
 	@Test
 	@Order(20)
-	public void test_getQuestionsBySubTopicId() {
+	void test_getQuestionsBySubTopicId() {
 		Long sub_topic_id = 1l;
 		ResponseEntity<List<Questions>> claimResponse = restTemplate.exchange(
 				String.format(CourseApiUrl.QUESTIONS_BY_SUB_TOPIC_ID_API_ENDPOINT, sub_topic_id), HttpMethod.GET, null,
