@@ -16,9 +16,6 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @Configuration
 @EnableWebSecurity
 public class SpringSecurityConfiguration extends WebSecurityConfigurerAdapter {
-
-	@Value("${security.enable-csrf}")
-    private boolean csrfEnabled;
 	
 	@Autowired
 	private CustomUserDetailsService userDetailsService;
@@ -48,10 +45,6 @@ public class SpringSecurityConfiguration extends WebSecurityConfigurerAdapter {
 
 	@Override
 	protected void configure(HttpSecurity httpSecurity) throws Exception {
-
-		if (!csrfEnabled) {
-			httpSecurity.cors().and().csrf().disable();
-        }
 		
 		httpSecurity.authorizeRequests()
 		.antMatchers("/users/authenticate/**").permitAll().anyRequest().authenticated().and().exceptionHandling()
