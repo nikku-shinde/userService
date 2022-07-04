@@ -34,7 +34,7 @@ public interface UserRepository extends JpaRepository<UserData, Long>{
 	public List<String> getUserData();
 	
 	@Query(value = "select user_id from users_roles_tab where role_id = ?1" , nativeQuery = true)
-	public List<Long> getUserIdByRoleId(@Param("role_id") Long role_id);
+	public List<Long> getUserIdByRoleId(@Param("role_id") Long roleId);
 	
 	@Query("select e from UserData e where e.email=:email")
 	public UserData getUserByEmail(@Param("email") String email);
