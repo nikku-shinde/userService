@@ -89,7 +89,6 @@ public class UserController {
 	public ResponseEntity<UserData> getUserByUserName(@PathVariable("userName") String userName) {
 		try {
 			UserData user = this.userService.getUserByUserName(userName);
-			System.out.println(user.getName());
 			return new ResponseEntity<UserData>(user, HttpStatus.FOUND);
 		} catch (Exception e) {
 			return new ResponseEntity<UserData>(HttpStatus.NOT_FOUND);

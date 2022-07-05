@@ -17,4 +17,13 @@ public class EmailPayload {
 	private String subject;
 	private String text;
 	private File file;
+	
+	public EmailPayload(String email, String subject, String text) {
+		super();
+		this.email = email;
+		this.subject = subject;
+		this.text = text;
+	}
+	
+	
 }

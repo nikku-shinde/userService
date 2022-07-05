@@ -34,6 +34,7 @@ import com.example.usermicroservice.payload.ForgotPasswordPayload;
 import com.example.usermicroservice.payload.OtpPayload;
 import com.example.usermicroservice.repository.RoleRepository;
 import com.example.usermicroservice.repository.UserRepository;
+import com.example.usermicroservice.util.Constants;
 import com.example.usermicroservice.util.CourseApiUrl;
 @Service
 public class UserServiceImpl implements UserService {
@@ -315,7 +316,7 @@ public class UserServiceImpl implements UserService {
 		UserData user = this.userRepo.getUserByEmail(forgotPasswordPayload.getEmail());
 		user.setPassword(passwordEncoder.encode(forgotPasswordPayload.getNewPassword()));
 		this.userRepo.save(user);
-		return "Password Updated Successfully";
+		return Constants.PASSWORD_CHANGED_SUCCESSFULLY;
 	}
 
 

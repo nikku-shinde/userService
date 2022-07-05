@@ -25,4 +25,5 @@ public class Constants {
 	public static final String USER_UPDATED_SUCCESSFULLY = "User Updated Successfully";
 	public static final String USER_CANNOT_DELETE = "User cannot delete";
 	public static final String USER_CANNOT_UPDATE = "User cannot update";
+	public static final String PASSWORD_CHANGED_SUCCESSFULLY = "Password Changed Successfully";
 }
