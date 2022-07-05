@@ -79,32 +79,40 @@ public class UserController {
 	public ResponseEntity<List<UserData>> getAllUsers() {
 		try {
 			List<UserData> users = this.userService.getAllUsers();
-			return ResponseEntity.ok(users);
+			return new ResponseEntity<List<UserData>>(users, HttpStatus.FOUND);
 		} catch (Exception e) {
-			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+			return new ResponseEntity<List<UserData>>(HttpStatus.NOT_FOUND);
 		}
 	}
 
 	@GetMapping("/authenticate/getUserByUserName/{userName}")
 	public ResponseEntity<UserData> getUserByUserName(@PathVariable("userName") String userName) {
-		return ResponseEntity.ok(this.userService.getUserByUserName(userName));
+		try {
+			UserData user = this.userService.getUserByUserName(userName);
+			System.out.println(user.getName());
+			return new ResponseEntity<UserData>(user, HttpStatus.FOUND);
+		} catch (Exception e) {
+			return new ResponseEntity<UserData>(HttpStatus.NOT_FOUND);
+		}
 	}
 
 	@GetMapping("/getUserById/{id}")
-	public ResponseEntity<Object> getUserById(@PathVariable("id") Long id) {
+	public ResponseEntity<UserData> getUserById(@PathVariable("id") Long id) {
 		try {
-			return ResponseEntity.ok(this.userService.getUserById(id));
+			UserData user = this.userService.getUserById(id);
+			return new ResponseEntity<UserData>(user, HttpStatus.FOUND);
 		} catch (UserNotFoundException e) {
-			return ResponseEntity.ok(new UserNotFoundException("User Not found", e));
+			return new ResponseEntity<UserData>(HttpStatus.NOT_FOUND);
 		}
 	}
 
 	@PostMapping("/authenticate/add-userData")
-	public ResponseEntity<Object> addUserData(@RequestBody UserDTO user) {
+	public ResponseEntity<UserData> addUserData(@RequestBody UserDTO userDTO) {
 		try {
-			return ResponseEntity.ok(this.userService.addUserData(user));
+			UserData user = this.userService.addUserData(userDTO);
+			return new ResponseEntity<UserData>(user, HttpStatus.CREATED);
 		} catch (Exception e) {
-			return ResponseEntity.ok(new Exception("User Data Invalid", e));
+			return new ResponseEntity<UserData>(HttpStatus.CONFLICT);
 		}
 	}
 
@@ -112,143 +120,173 @@ public class UserController {
 	public ResponseEntity<Object> deleteUser(@PathVariable("id") Long id){
 		try {
 			this.userService.deleteUser(id);
-			return ResponseEntity.ok(Constants.USER_DELETED_SUCCESSFULLY);
+			return new ResponseEntity<Object>(Constants.USER_DELETED_SUCCESSFULLY, HttpStatus.OK);
 		} catch (Exception e) {
-			return ResponseEntity.ok(new Exception("User cannot delete" ,e));
+			return new ResponseEntity<Object>(Constants.USER_CANNOT_DELETE, HttpStatus.NOT_FOUND);
 		}
 	}
 	
 	@PutMapping("/updateUser/{id}")
-	public ResponseEntity<Object> updateUser(@PathVariable("id") Long id , @RequestBody UserDTO userData) {
+	public ResponseEntity<UserData> updateUser(@PathVariable("id") Long id , @RequestBody UserDTO userData) {
 		try {
-			return ResponseEntity.ok(this.userService.updateUser(id, userData));
+			UserData user = this.userService.updateUser(id, userData);
+			return new ResponseEntity<UserData>(user, HttpStatus.OK);
 		} catch (Exception e) {
-			return ResponseEntity.ok(new Exception("User cannot  updated",e));
+			return new ResponseEntity<UserData>(HttpStatus.CONFLICT);
 		}
 	}
 	
 	@GetMapping("/authenticate/getAllRoles")
 	public ResponseEntity<List<RoleModel>> getAllRoles() {
-		return ResponseEntity.ok(this.userService.getAllRoles());
+		try {
+			List<RoleModel> roleList = this.userService.getAllRoles();
+			return new ResponseEntity<List<RoleModel>>(roleList, HttpStatus.FOUND);
+		} catch (Exception e) {
+			return new ResponseEntity<List<RoleModel>>(HttpStatus.NOT_FOUND);
+		}
 	}
 	
 	@PostMapping("/authenticate/add-roles")
-	public ResponseEntity<Object> addRoles(@RequestBody RoleDTO roles) {
+	public ResponseEntity<RoleModel> addRoles(@RequestBody RoleDTO roles) {
 		try {
-			return ResponseEntity.ok(this.userService.addRoles(roles));
+			RoleModel role = this.userService.addRoles(roles);
+			return new ResponseEntity<RoleModel>(role, HttpStatus.CREATED);
 		} catch (Exception e) {
-			return ResponseEntity.ok(new Exception("Role Data Invalid",e));
+			return new ResponseEntity<>(HttpStatus.CONFLICT);
 		}
 	}
 
 	@GetMapping("/getUser")
 	public ResponseEntity<List<String>> getUser() {
-		return ResponseEntity.ok(this.userService.getUser());
+		try {
+			List<String> users = this.userService.getUser();
+			return new ResponseEntity<List<String>>(users, HttpStatus.FOUND);
+		} catch (Exception e) {
+			return new ResponseEntity<List<String>>(HttpStatus.NOT_FOUND);
+		}
 	}
 
 	@PostMapping("/add-course")
-	public ResponseEntity<Object> addCourse(@RequestBody Course course, Principal principal) {
+	public ResponseEntity<Course> addCourse(@RequestBody Course course) {
 		try {
-			return ResponseEntity.ok(this.userService.addCourse(course));
+			Course courseData = this.userService.addCourse(course);
+			return new ResponseEntity<Course>(courseData, HttpStatus.CREATED);
 		} catch (Exception e) {
-			return ResponseEntity.ok(new Exception(Constants.COURSE_ALREADY_ADDED,e));
+			return new ResponseEntity<Course>(HttpStatus.CONFLICT);
 		}
 	}
 
 	@PostMapping("/add-topics")
-	public ResponseEntity<Object> addTopics(@RequestBody Topics topics, Principal principal) {
-		UserData user = null;
+	public ResponseEntity<Topics> addTopics(@RequestBody Topics topics) {
+		Topics topic = null;
 		try {
-			user = this.userRepo.getUserByUserName(principal.getName());
-			for (RoleModel role : user.getRoles()) {
-				if (role.getRoleName().equalsIgnoreCase(Constants.ROLE_AUTHOR)
-						|| role.getRoleName().equalsIgnoreCase(Constants.ROLE_MENTOR)) {
-					return ResponseEntity.ok(this.userService.addTopics(topics));
-				}
-			}
-			return ResponseEntity.ok(Constants.ADMIN_CANNOT_ADD_TOPICS);
+			topic = this.userService.addTopics(topics);
+			return new ResponseEntity<Topics>(topic, HttpStatus.CREATED);
 		} catch (Exception e) {
-			return ResponseEntity.ok(Constants.ADMIN_CANNOT_ADD_TOPICS);
+			return new ResponseEntity<Topics>(HttpStatus.CONFLICT);
 		}
 	}
 
 	@PostMapping("/add-sub_topics")
-	public ResponseEntity<Object> addSubTopics(@RequestBody SubTopic subTopic, Principal principal) {
-		UserData user = null;
+	public ResponseEntity<SubTopic> addSubTopics(@RequestBody SubTopic subTopic) {
+		SubTopic subTopicData= null;
 		try {
-			user = this.userRepo.getUserByUserName(principal.getName());
-			for (RoleModel role : user.getRoles()) {
-				if (role.getRoleName().equalsIgnoreCase(Constants.ROLE_AUTHOR)
-						|| role.getRoleName().equalsIgnoreCase(Constants.ROLE_MENTOR)) {
-					return ResponseEntity.ok(this.userService.addSubTopics(subTopic));
-				}
-			}
-			return ResponseEntity.ok(Constants.ADMIN_CANNOT_ADD_SUBTOPICS);
+			subTopicData = this.userService.addSubTopics(subTopic);
+			return new ResponseEntity<SubTopic>(subTopicData, HttpStatus.CREATED);
 			
 		} catch (Exception e) {
-			return ResponseEntity.ok(Constants.ADMIN_CANNOT_ADD_SUBTOPICS);
+			return new ResponseEntity<SubTopic>(HttpStatus.CONFLICT);
 		}	
 	}
 
 	@PostMapping("/add-questions")
-	public ResponseEntity<Object> addQuestions(@RequestBody Questions questions, Principal principal) {
-		UserData user = null;
+	public ResponseEntity<Questions> addQuestions(@RequestBody Questions questions) {
+		Questions question = null;
 		try {
-			user = this.userRepo.getUserByUserName(principal.getName());
-			for (RoleModel role : user.getRoles()) {
-				if (role.getRoleName().equalsIgnoreCase(Constants.ROLE_AUTHOR)
-						|| role.getRoleName().equalsIgnoreCase(Constants.ROLE_MENTOR)) {
-					return ResponseEntity.ok(this.userService.addQuestions(questions));
-				}
-			}
-			return ResponseEntity.ok(Constants.ADMIN_CANNOT_ADD_QUESTIONS);
+			question = this.userService.addQuestions(questions);
+			return new ResponseEntity<Questions>(question, HttpStatus.CREATED);
 		} catch (Exception e) {
-			return ResponseEntity.ok(Constants.ADMIN_CANNOT_ADD_QUESTIONS);
+			return new ResponseEntity<Questions>(HttpStatus.CONFLICT);
 		}
 	}
 
 	@GetMapping("/authenticate/getCourseNames")
 	public ResponseEntity<List<Course>> getCourseNames() {
-		return ResponseEntity.ok(this.userService.getCourseNames());
+		try {
+			List<Course> courseList = this.userService.getCourseNames();
+			return new ResponseEntity<List<Course>>(courseList, HttpStatus.FOUND);
+		} catch (Exception e) {
+			return new ResponseEntity<List<Course>>(HttpStatus.NOT_FOUND);
+		}
 	}
 
 	@GetMapping("/getTopics")
 	public ResponseEntity<List<Topics>> getTopics() {
-		return ResponseEntity.ok(this.userService.getTopics());
+		try {
+			List<Topics> topicList = this.userService.getTopics();
+			return new ResponseEntity<List<Topics>>(topicList, HttpStatus.FOUND);
+		} catch (Exception e) {
+			return new ResponseEntity<List<Topics>>(HttpStatus.NOT_FOUND);
+		}
 	}
 
 	@GetMapping("/getSubTopics")
 	public ResponseEntity<List<SubTopic>> getSubTopics() {
-		return ResponseEntity.ok(this.userService.getSubTopics());
+		try {
+			List<SubTopic> subTopicList = this.userService.getSubTopics();
+			return new ResponseEntity<List<SubTopic>>(subTopicList, HttpStatus.FOUND);
+		} catch (Exception e) {
+			return new ResponseEntity<List<SubTopic>>(HttpStatus.NOT_FOUND);
+		}
 	}
 
 	@GetMapping("/getQuestions")
 	public ResponseEntity<List<Questions>> getQuestions() {
-		return ResponseEntity.ok(this.userService.getQuestions());
+		try {
+			List<Questions> questionList = this.userService.getQuestions();
+			return new ResponseEntity<List<Questions>>(questionList, HttpStatus.FOUND);
+		} catch (Exception e) {
+			return new ResponseEntity<List<Questions>>(HttpStatus.NOT_FOUND);
+		}
 	}
 
 	@GetMapping("/getTopicsById/{courseId}")
-	public List<Topics> getTopicByCourseId(@PathVariable("courseId") Long courseId) {
-		return this.userService.getTopicByCourseId(courseId);
+	public ResponseEntity<List<Topics>> getTopicByCourseId(@PathVariable("courseId") Long courseId) {
+		try {
+			List<Topics> topicList = this.userService.getTopicByCourseId(courseId);
+			return new ResponseEntity<List<Topics>>(topicList, HttpStatus.FOUND);
+		} catch (Exception e) {
+			return new ResponseEntity<List<Topics>>(HttpStatus.NOT_FOUND);
+		}
 	}
 
 	@GetMapping("/getSubTopicsById/{topicId}")
 	public ResponseEntity<List<SubTopic>> getSubTopicByTopicId(@PathVariable("topicId") Long topicId) {
-		return ResponseEntity.ok(this.userService.getSubTopicByTopicId(topicId));
+		try {
+			List<SubTopic> subTopicList = this.userService.getSubTopicByTopicId(topicId);
+			return new ResponseEntity<List<SubTopic>>(subTopicList, HttpStatus.FOUND);
+		} catch (Exception e) {
+			return new ResponseEntity<List<SubTopic>>(HttpStatus.NOT_FOUND);
+		}
 	}
 
 	@GetMapping("/getQuestionsById/{subTopicId}")
 	public ResponseEntity<List<Questions>> getQuestionsBySubTopicId(@PathVariable("subTopicId") Long subTopicId) {
-		return ResponseEntity.ok(this.userService.getQuestionsBySubTopicId(subTopicId));
+		try {
+			List<Questions> questionList = this.userService.getQuestionsBySubTopicId(subTopicId);
+			return new ResponseEntity<List<Questions>>(questionList, HttpStatus.FOUND);
+		} catch (Exception e) {
+			return new ResponseEntity<List<Questions>>(HttpStatus.NOT_FOUND);
+		}
 	}
 	
 	@PostMapping("/sendEmail")
 	public ResponseEntity<Object> sendEmail(@RequestBody EmailPayload emailPayload) {
 		try {
 			this.userService.sendEmail(emailPayload);
-			return ResponseEntity.ok(Constants.MAIL_SEND_MESSAGE);
+			return new ResponseEntity<Object>(Constants.MAIL_SEND_MESSAGE, HttpStatus.OK);
 		} catch (MailException mailException) {
-			return ResponseEntity.ok(mailException);
+			return new ResponseEntity<Object>(HttpStatus.BAD_GATEWAY);
 		}
 	}
 	
@@ -256,27 +294,29 @@ public class UserController {
 	public ResponseEntity<Object> sendAttachmentEmail(@RequestBody EmailPayload emailPayload) {
 		try {
 			this.userService.sendAttachmentEmail(emailPayload);
-			return ResponseEntity.ok(Constants.MAIL_SEND_MESSAGE);
+			return new ResponseEntity<Object>(Constants.MAIL_SEND_MESSAGE, HttpStatus.OK);
 		} catch (MailException mailException) {
-			return ResponseEntity.ok(mailException);
+			return new ResponseEntity<Object>(HttpStatus.BAD_GATEWAY);
 		}
 	}
 	
 	@PostMapping("/authenticate/send-otp")
 	public ResponseEntity<Object> sendOtp(@RequestBody OtpPayload otpPayload) {
 		try {
-			return ResponseEntity.ok(this.userService.sendOtp(otpPayload));
+			Integer otp = this.userService.sendOtp(otpPayload);
+			return new ResponseEntity<Object>(otp, HttpStatus.OK);
 		} catch (Exception e) {
-			return ResponseEntity.ok(new Exception("Something went wrong", e));
+			return new ResponseEntity<Object>(HttpStatus.BAD_GATEWAY);
 		}
 	}
 	
 	@PostMapping("/authenticate/forgotPassword")
 	public ResponseEntity<Object> changePassword(@RequestBody ForgotPasswordPayload forgotPasswordPayload){
 		try {
-			return ResponseEntity.ok(this.userService.changePassword(forgotPasswordPayload));
+			String passwordData = this.userService.changePassword(forgotPasswordPayload);
+			return new ResponseEntity<Object>(passwordData, HttpStatus.OK);
 		} catch (Exception e) {
-			return ResponseEntity.ok(new Exception("Something went wrong", e));
+			return new ResponseEntity<Object>(HttpStatus.BAD_GATEWAY);
 		}
 	}
 
@@ -296,9 +336,9 @@ public class UserController {
 				String token = jwtUtil.generateToken(userDetails);
 				authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(loginPayload.getUserName(),
 						loginPayload.getPassword()));
-				return ResponseEntity.ok(new AuthenticationResponse(token));
+				return new ResponseEntity<Object>(new AuthenticationResponse(token), HttpStatus.OK);
 			} else {
-				return ResponseEntity.ok(Constants.PASSWORD_INVALID);
+				return new ResponseEntity<Object>(Constants.PASSWORD_INVALID, HttpStatus.BAD_REQUEST);
 			}
 
 		} catch (DisabledException e) {
@@ -306,7 +346,7 @@ public class UserController {
 		} catch (BadCredentialsException e) {
 			throw new BadCredentialsException("Invalid Credentials", e);
 		} catch (NullPointerException e) {
-			return ResponseEntity.ok(Constants.USER_INVALID);
+			return new ResponseEntity<Object>(Constants.USER_INVALID, HttpStatus.CONFLICT);
 		}
 	}
 }

@@ -23,4 +23,6 @@ public class Constants {
 	public static final String USER_ADDED_SUCCESSFULLY = "User Added Successfully";
 	public static final String ROLE_ADDED_SUCCESSFULLY = "Role Added Successfully";
 	public static final String USER_UPDATED_SUCCESSFULLY = "User Updated Successfully";
+	public static final String USER_CANNOT_DELETE = "User cannot delete";
+	public static final String USER_CANNOT_UPDATE = "User cannot update";
 }
