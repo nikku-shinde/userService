@@ -32,8 +32,6 @@ public interface UserService {
 	
 	public UserData updateUser(Long id , UserDTO user);
 	
-	public UserData addAdminUserData(UserData user);
-	
 	public RoleModel addRoles(RoleDTO roles);
 	
 	public Course addCourse(Course course);
@@ -59,8 +57,6 @@ public interface UserService {
 	public List<Questions> getQuestionsBySubTopicId(Long subTopicId);
 	
 	public void sendEmail(EmailPayload emailPayload);
-	
-	public void sendAttachmentEmail(EmailPayload emailPayload);
 	
 	public Integer sendOtp(OtpPayload otpPayload);
 	

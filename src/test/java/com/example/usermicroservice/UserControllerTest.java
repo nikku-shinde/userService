@@ -15,7 +15,15 @@ import org.junit.jupiter.api.TestMethodOrder;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.User;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
+import com.example.usermicroservice.config.CustomUserDetailsService;
+import com.example.usermicroservice.config.JwtUtil;
 import com.example.usermicroservice.controller.UserController;
 import com.example.usermicroservice.dto.RoleDTO;
 import com.example.usermicroservice.dto.UserDTO;
@@ -27,11 +35,14 @@ import com.example.usermicroservice.helper.SubTopic;
 import com.example.usermicroservice.helper.Topics;
 import com.example.usermicroservice.payload.EmailPayload;
 import com.example.usermicroservice.payload.ForgotPasswordPayload;
+import com.example.usermicroservice.payload.LoginPayload;
 import com.example.usermicroservice.payload.OtpPayload;
+import com.example.usermicroservice.repository.UserRepository;
 import com.example.usermicroservice.service.UserService;
 import com.example.usermicroservice.util.Constants;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.Mockito.when;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
@@ -43,8 +54,23 @@ class UserControllerTest {
 	@Mock
 	private UserService service;
 	
+	@Mock
+	private UserRepository userRepo;
+	
 	@InjectMocks
 	private UserController userController;
+	
+	@Mock
+	private CustomUserDetailsService userDetailsService;
+	
+	@Mock
+	private JwtUtil jwtUtil;
+	
+	@Mock
+	private AuthenticationManager authenticationManager;
+	
+	@Mock
+	private BCryptPasswordEncoder passwordEncoder;
 	
 	
 	
@@ -262,17 +288,6 @@ class UserControllerTest {
 	
 	@Test
 	@Order(21)
-	void test_sendAttachmentEmail() {
-		EmailPayload emailPayload = new EmailPayload("abc@gmail.com", "test mail", "test mail", new File("new.txt"));
-		service.sendAttachmentEmail(emailPayload);
-		verify(service,times(1)).sendAttachmentEmail(emailPayload);
-		ResponseEntity<Object> res = userController.sendAttachmentEmail(emailPayload);
-		assertEquals(HttpStatus.OK, res.getStatusCode());
-		assertEquals(Constants.MAIL_SEND_MESSAGE, res.getBody());
-	}
-	
-	@Test
-	@Order(22)
 	void test_sendOtp() {
 		OtpPayload otpPayload = new OtpPayload("abc@gmail.com");
 		Integer otp = 123456;
@@ -283,12 +298,31 @@ class UserControllerTest {
 	}
 	
 	@Test
-	@Order(23)
+	@Order(22)
 	void test_changePassword() {
 		ForgotPasswordPayload forgotPasswordPayload = new ForgotPasswordPayload("abc@gmail.com", "abc@231");
 		when(service.changePassword(forgotPasswordPayload)).thenReturn(Constants.PASSWORD_CHANGED_SUCCESSFULLY);
 		ResponseEntity<Object> res = userController.changePassword(forgotPasswordPayload);
 		assertEquals(HttpStatus.OK, res.getStatusCode());
 		assertEquals(Constants.PASSWORD_CHANGED_SUCCESSFULLY, res.getBody());
+	}
+	
+	@Test
+	@Order(23)
+	void test_createAuthenticationToken() throws Exception {
+		LoginPayload loginPayload = new LoginPayload("abc@123", "abc@123");
+		UserData user = UserDummyData.getUser();
+		when(userRepo.getUserByUserName(loginPayload.getUserName())).thenReturn(user);
+		List<SimpleGrantedAuthority> roles = new ArrayList<SimpleGrantedAuthority>();
+		when(passwordEncoder.matches(loginPayload.getPassword(), user.getPassword())).thenReturn(true);
+		UserDetails userDetails = new User(loginPayload.getUserName(), loginPayload.getPassword(), roles);
+		when(userDetailsService.loadUserByUsername(loginPayload.getUserName())).thenReturn(userDetails);
+		String token = "token";
+		when(jwtUtil.generateToken(userDetails)).thenReturn(token);
+		UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken = new UsernamePasswordAuthenticationToken(loginPayload.getUserName(),loginPayload.getPassword());
+		authenticationManager.authenticate(usernamePasswordAuthenticationToken);
+		ResponseEntity<Object> res = userController.createAuthenticationToken(loginPayload);
+		assertEquals(HttpStatus.OK, res.getStatusCode());
+		assertNotNull(res.getBody());
 	}
 }

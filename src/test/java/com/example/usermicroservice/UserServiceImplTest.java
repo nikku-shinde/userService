@@ -19,6 +19,7 @@ import org.mockito.Mock;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpMethod;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -32,6 +33,9 @@ import com.example.usermicroservice.helper.Course;
 import com.example.usermicroservice.helper.Questions;
 import com.example.usermicroservice.helper.SubTopic;
 import com.example.usermicroservice.helper.Topics;
+import com.example.usermicroservice.payload.EmailPayload;
+import com.example.usermicroservice.payload.ForgotPasswordPayload;
+import com.example.usermicroservice.payload.OtpPayload;
 import com.example.usermicroservice.repository.RoleRepository;
 import com.example.usermicroservice.repository.UserRepository;
 import com.example.usermicroservice.service.UserServiceImpl;
@@ -224,115 +228,108 @@ class UserServiceImplTest {
 	@Test
 	@Order(14)
 	void test_getCourseNames() {
-		ResponseEntity<List<Course>> claimResponse = restTemplate.exchange(
-				CourseApiUrl.COURSES_LIST_API_ENDPOINT, HttpMethod.GET, null,
-				new ParameterizedTypeReference<List<Course>>() {
-				});
+		ResponseEntity<List<Course>> claimResponse = new ResponseEntity<List<Course>>(HttpStatus.OK);
 		when(restTemplate.exchange(
 				CourseApiUrl.COURSES_LIST_API_ENDPOINT, HttpMethod.GET, null,
 				new ParameterizedTypeReference<List<Course>>() {
 				})).thenReturn(claimResponse);
-		if (claimResponse != null && claimResponse.hasBody()) {
-			assertEquals(claimResponse.getBody().size(), service.getCourseNames().size());
-		}
+		service.getCourseNames();
+		assertNotNull(claimResponse);
 	}
 	
 	@Test
 	@Order(15)
 	void test_getTopics() {
-		ResponseEntity<List<Topics>> claimResponse = restTemplate.exchange(
-				CourseApiUrl.TOPICS_LIST_API_ENDPOINT, HttpMethod.GET, null,
-				new ParameterizedTypeReference<List<Topics>>() {
-				});
+		ResponseEntity<List<Topics>> claimResponse = new ResponseEntity<List<Topics>>(HttpStatus.OK);
 		when(restTemplate.exchange(
 				CourseApiUrl.TOPICS_LIST_API_ENDPOINT, HttpMethod.GET, null,
 				new ParameterizedTypeReference<List<Topics>>() {
 				})).thenReturn(claimResponse);
-		if (claimResponse != null && claimResponse.hasBody()) {
-			assertEquals(claimResponse.getBody().size(), service.getTopics().size());
-		}
+		service.getTopics();
+		assertNotNull(claimResponse);
 	}
 	
 	@Test
 	@Order(16)
 	void test_getSubTopics() {
-		ResponseEntity<List<SubTopic>> claimResponse = restTemplate.exchange(
-				CourseApiUrl.SUB_TOPICS_LIST_API_ENDPOINT, HttpMethod.GET, null,
-				new ParameterizedTypeReference<List<SubTopic>>() {
-				});
+		ResponseEntity<List<SubTopic>> claimResponse = new ResponseEntity<List<SubTopic>>(HttpStatus.OK);
 		when(restTemplate.exchange(
 				CourseApiUrl.SUB_TOPICS_LIST_API_ENDPOINT, HttpMethod.GET, null,
 				new ParameterizedTypeReference<List<SubTopic>>() {
 				})).thenReturn(claimResponse);
-		if (claimResponse != null && claimResponse.hasBody()) {
-			assertEquals(claimResponse.getBody().size(), service.getSubTopics().size());
-		}
+		service.getSubTopics();
+		assertNotNull(claimResponse);
 	}
 	
 	@Test
 	@Order(17)
 	void test_getQuestions() {
-		ResponseEntity<List<Questions>> claimResponse = restTemplate.exchange(
-				CourseApiUrl.QUESTIONS_LIST_API_ENDPOINT, HttpMethod.GET, null,
-				new ParameterizedTypeReference<List<Questions>>() {
-				});
+		ResponseEntity<List<Questions>> claimResponse = new ResponseEntity<List<Questions>>(HttpStatus.OK);
 		when(restTemplate.exchange(
 				CourseApiUrl.QUESTIONS_LIST_API_ENDPOINT, HttpMethod.GET, null,
 				new ParameterizedTypeReference<List<Questions>>() {
 				})).thenReturn(claimResponse);
-		if (claimResponse != null && claimResponse.hasBody()) {
-			assertEquals(claimResponse.getBody().size(), service.getQuestions().size());
-		}
+		service.getQuestions();
+		assertNotNull(claimResponse);
 	}
 	
 	@Test
 	@Order(18)
 	void test_getTopicByCourseId() {
-		Long course_id = 1l;
-		ResponseEntity<List<Topics>> claimResponse = restTemplate.exchange(
-				String.format(CourseApiUrl.TOPICS_BY_COURSE_ID_API_ENDPOINT, course_id), HttpMethod.GET, null,
-				new ParameterizedTypeReference<List<Topics>>() {
-				});
+		Long courseId = 1l;
+		ResponseEntity<List<Topics>> claimResponse = new ResponseEntity<List<Topics>>(HttpStatus.OK);
 		when(restTemplate.exchange(
-				String.format(CourseApiUrl.TOPICS_BY_COURSE_ID_API_ENDPOINT, course_id), HttpMethod.GET, null,
+				String.format(CourseApiUrl.TOPICS_BY_COURSE_ID_API_ENDPOINT, courseId), HttpMethod.GET, null,
 				new ParameterizedTypeReference<List<Topics>>() {
 				})).thenReturn(claimResponse);
-		if (claimResponse != null && claimResponse.hasBody()) {
-			assertEquals(claimResponse.getBody().size(), service.getTopicByCourseId(course_id).size());
-		}
+		service.getTopicByCourseId(courseId);
+		assertNotNull(claimResponse);
 	}
 	
 	@Test
 	@Order(19)
 	void test_getSubTopicByTopicId() {
-		Long topic_id = 1l;
-		ResponseEntity<List<SubTopic>> claimResponse = restTemplate.exchange(
-				String.format(CourseApiUrl.SUB_TOPICS_BY_TOPIC_ID_API_ENDPOINT, topic_id), HttpMethod.GET, null,
-				new ParameterizedTypeReference<List<SubTopic>>() {
-				});
+		Long topicId = 1l;
+		ResponseEntity<List<SubTopic>> claimResponse = new ResponseEntity<List<SubTopic>>(HttpStatus.OK);
 		when(restTemplate.exchange(
-				String.format(CourseApiUrl.SUB_TOPICS_BY_TOPIC_ID_API_ENDPOINT, topic_id), HttpMethod.GET, null,
+				String.format(CourseApiUrl.SUB_TOPICS_BY_TOPIC_ID_API_ENDPOINT, topicId), HttpMethod.GET, null,
 				new ParameterizedTypeReference<List<SubTopic>>() {
 				})).thenReturn(claimResponse);
-		if (claimResponse != null && claimResponse.hasBody()) {
-			assertEquals(claimResponse.getBody().size(), service.getSubTopicByTopicId(topic_id).size());
-		}
+		service.getSubTopicByTopicId(topicId);
+		assertNotNull(claimResponse);
 	}
 	
 	@Test
 	@Order(20)
 	void test_getQuestionsBySubTopicId() {
-		Long sub_topic_id = 1l;
-		ResponseEntity<List<Questions>> claimResponse = restTemplate.exchange(
-				String.format(CourseApiUrl.QUESTIONS_BY_SUB_TOPIC_ID_API_ENDPOINT, sub_topic_id), HttpMethod.GET, null,
-				new ParameterizedTypeReference<List<Questions>>() {
-				});
+		Long subTopicId = 1l;
+		ResponseEntity<List<Questions>> claimResponse = new ResponseEntity<List<Questions>>(HttpStatus.OK);
 		when(restTemplate.exchange(
-				String.format(CourseApiUrl.QUESTIONS_BY_SUB_TOPIC_ID_API_ENDPOINT, sub_topic_id), HttpMethod.GET, null,
+				String.format(CourseApiUrl.QUESTIONS_BY_SUB_TOPIC_ID_API_ENDPOINT, subTopicId), HttpMethod.GET, null,
 				new ParameterizedTypeReference<List<Questions>>() {
 				})).thenReturn(claimResponse);
-		if (claimResponse != null && claimResponse.hasBody()) {
-			assertEquals(claimResponse.getBody().size(), service.getQuestionsBySubTopicId(sub_topic_id).size());
-		}
+		service.getQuestionsBySubTopicId(subTopicId);
+		assertNotNull(claimResponse);
+	}
+	
+	@Test
+	@Order(21)
+	void test_changePassword() {
+		UserData user = UserDummyData.getUser();
+		ForgotPasswordPayload forgotPasswordPayload = new ForgotPasswordPayload("abc@gmail.com", "abc@231");
+		when(userRepo.getUserByEmail(forgotPasswordPayload.getEmail())).thenReturn(user);
+		when(passwordEncoder.encode(forgotPasswordPayload.getNewPassword())).thenReturn(user.getPassword());
+		when(userRepo.save(user)).thenReturn(user);
+		assertEquals(Constants.PASSWORD_CHANGED_SUCCESSFULLY, service.changePassword(forgotPasswordPayload));
+	}
+	
+	@Test
+	@Order(22)
+	void test_sendOtp() {
+		EmailPayload emailPayload = new EmailPayload("abc@gmail.com", "test mail", "test mail");
+		OtpPayload otpPayload = new OtpPayload("abc@gmail.com");
+		emailPayload.setEmail(otpPayload.getEmail());
+		service.sendEmail(emailPayload);
+		assertNotNull(service.sendOtp(otpPayload));
 	}
 }

@@ -1,6 +1,5 @@
 package com.example.usermicroservice.controller;
 
-import java.security.Principal;
 import java.util.List;
 
 import org.slf4j.Logger;
@@ -283,16 +282,6 @@ public class UserController {
 	public ResponseEntity<Object> sendEmail(@RequestBody EmailPayload emailPayload) {
 		try {
 			this.userService.sendEmail(emailPayload);
-			return new ResponseEntity<Object>(Constants.MAIL_SEND_MESSAGE, HttpStatus.OK);
-		} catch (MailException mailException) {
-			return new ResponseEntity<Object>(HttpStatus.BAD_GATEWAY);
-		}
-	}
-	
-	@PostMapping("/sendAttachedEmail")
-	public ResponseEntity<Object> sendAttachmentEmail(@RequestBody EmailPayload emailPayload) {
-		try {
-			this.userService.sendAttachmentEmail(emailPayload);
 			return new ResponseEntity<Object>(Constants.MAIL_SEND_MESSAGE, HttpStatus.OK);
 		} catch (MailException mailException) {
 			return new ResponseEntity<Object>(HttpStatus.BAD_GATEWAY);
