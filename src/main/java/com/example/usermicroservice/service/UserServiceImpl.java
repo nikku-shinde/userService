@@ -3,20 +3,15 @@ package com.example.usermicroservice.service;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
-import javax.mail.MessagingException;
-import javax.mail.internet.MimeMessage;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.ParameterizedTypeReference;
-import org.springframework.core.io.FileSystemResource;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
-import org.springframework.mail.MailParseException;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
-import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
@@ -104,23 +99,7 @@ public class UserServiceImpl implements UserService {
 		return this.roleRepo.save(role);
 	}
 
-	@Override
-	public UserData addAdminUserData(UserData user) {
-		List<RoleModel> roles = roleRepo.findAll();
-		List<RoleModel> userRoles = new ArrayList<>();
-		for (RoleModel role_user : user.getRoles()) {
-			for (RoleModel role : roles) {
-				if (role.getId().equals(role_user.getId())) {
-					userRoles.add(role);
-					user.setRoles(userRoles);
-					user.setPassword(passwordEncoder.encode(user.getPassword()));
-				}
-			}
-		}
-		return this.userRepo.save(user);
-	}
-
-	@Override
+	@Override	
 	public Course addCourse(Course course) {
 		Course courses = this.restTemplate.postForObject(CourseApiUrl.ADD_COURSE_API_ENDPOINT, course,
 				Course.class);
@@ -277,23 +256,6 @@ public class UserServiceImpl implements UserService {
 		simpleMailMessage.setText(emailPayload.getText());
 		
 		javaMailSender.send(simpleMailMessage);
-	}
-
-	@Override
-	public void sendAttachmentEmail(EmailPayload emailPayload) {
-		MimeMessage mimeMessage = this.javaMailSender.createMimeMessage();
-		
-		try {
-			MimeMessageHelper helper = new MimeMessageHelper(mimeMessage, true);
-			helper.setTo(emailPayload.getEmail());
-			helper.setSubject(emailPayload.getSubject());
-			helper.setText(emailPayload.getText());
-			FileSystemResource file = new FileSystemResource(emailPayload.getFile());
-			helper.addAttachment(file.getFilename() , file);
-		} catch (MessagingException e) {
-			throw new MailParseException(e);
-		}
-		javaMailSender.send(mimeMessage);
 	}
 
 	@Override
