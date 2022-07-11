@@ -26,7 +26,7 @@ public interface UserService {
 	
 	public UserData addUserData(UserDTO user);
 	
-	public void deleteUser(Long id);
+	public String deleteUser(Long id);
 	
 	public List<String> getUser();
 	
@@ -56,7 +56,7 @@ public interface UserService {
 	
 	public List<Questions> getQuestionsBySubTopicId(Long subTopicId);
 	
-	public void sendEmail(EmailPayload emailPayload);
+	public String sendEmail(EmailPayload emailPayload);
 	
 	public Integer sendOtp(OtpPayload otpPayload);
 	

@@ -99,7 +99,7 @@ public class UserController {
 		try {
 			UserData user = this.userService.getUserById(id);
 			return new ResponseEntity<UserData>(user, HttpStatus.FOUND);
-		} catch (UserNotFoundException e) {
+		} catch (Exception e) {
 			return new ResponseEntity<UserData>(HttpStatus.NOT_FOUND);
 		}
 	}
@@ -117,8 +117,7 @@ public class UserController {
 	@DeleteMapping("/deleteById/{id}")
 	public ResponseEntity<Object> deleteUser(@PathVariable("id") Long id){
 		try {
-			this.userService.deleteUser(id);
-			return new ResponseEntity<Object>(Constants.USER_DELETED_SUCCESSFULLY, HttpStatus.OK);
+			return new ResponseEntity<Object>(this.userService.deleteUser(id), HttpStatus.OK);
 		} catch (Exception e) {
 			return new ResponseEntity<Object>(Constants.USER_CANNOT_DELETE, HttpStatus.NOT_FOUND);
 		}
@@ -281,9 +280,8 @@ public class UserController {
 	@PostMapping("/sendEmail")
 	public ResponseEntity<Object> sendEmail(@RequestBody EmailPayload emailPayload) {
 		try {
-			this.userService.sendEmail(emailPayload);
-			return new ResponseEntity<Object>(Constants.MAIL_SEND_MESSAGE, HttpStatus.OK);
-		} catch (MailException mailException) {
+			return new ResponseEntity<Object>(this.userService.sendEmail(emailPayload), HttpStatus.OK);
+		} catch (Exception e) {
 			return new ResponseEntity<Object>(HttpStatus.BAD_GATEWAY);
 		}
 	}
@@ -330,11 +328,11 @@ public class UserController {
 			}
 
 		} catch (DisabledException e) {
-			throw new DisabledException("User Disabled", e);
+			return new ResponseEntity<Object>("User Disabled", HttpStatus.CONFLICT);
 		} catch (BadCredentialsException e) {
-			throw new BadCredentialsException("Invalid Credentials", e);
+			return new ResponseEntity<Object>("Invalid Credentials", HttpStatus.CONFLICT);
 		} catch (NullPointerException e) {
-			return new ResponseEntity<Object>(Constants.USER_INVALID, HttpStatus.CONFLICT);
+			return new ResponseEntity<Object>(Constants.USER_INVALID, HttpStatus.NOT_FOUND);
 		}
 	}
 }

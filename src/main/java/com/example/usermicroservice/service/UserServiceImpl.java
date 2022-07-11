@@ -233,9 +233,10 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
-	public void deleteUser(Long id) {
+	public String deleteUser(Long id) {
 		UserData user = this.userRepo.getUserById(id);
 		this.userRepo.delete(user);
+		return Constants.USER_DELETED_SUCCESSFULLY;
 	}
 
 	@Override
@@ -248,7 +249,7 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
-	public void sendEmail(EmailPayload emailPayload) {
+	public String sendEmail(EmailPayload emailPayload) {
 		
 		SimpleMailMessage simpleMailMessage = new SimpleMailMessage();
 		simpleMailMessage.setTo(emailPayload.getEmail());
@@ -256,6 +257,8 @@ public class UserServiceImpl implements UserService {
 		simpleMailMessage.setText(emailPayload.getText());
 		
 		javaMailSender.send(simpleMailMessage);
+		
+		return Constants.MAIL_SEND_MESSAGE;
 	}
 
 	@Override
